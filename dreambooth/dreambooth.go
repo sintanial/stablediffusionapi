@@ -1,0 +1,227 @@
+package dreambooth
+
+import (
+	"net/http"
+	"stablediffusionapi"
+)
+
+type Client struct {
+	APIKey string
+	Client *http.Client
+}
+
+func NewClient(APIKey string) *Client {
+	return &Client{
+		APIKey: APIKey,
+		Client: http.DefaultClient,
+	}
+}
+
+type TextToImageRequest struct {
+	stablediffusionapi.RequestKey
+	ModelId           string      `json:"model_id"`
+	Prompt            string      `json:"prompt"`
+	NegativePrompt    string      `json:"negative_prompt"`
+	Width             string      `json:"width"`
+	Height            string      `json:"height"`
+	Samples           string      `json:"samples"`
+	NumInferenceSteps string      `json:"num_inference_steps"`
+	SafetyChecker     string      `json:"safety_checker"`
+	EnhancePrompt     string      `json:"enhance_prompt"`
+	Seed              interface{} `json:"seed"`
+	GuidanceScale     float64     `json:"guidance_scale"`
+	MultiLingual      string      `json:"multi_lingual"`
+	Panorama          string      `json:"panorama"`
+	SelfAttention     string      `json:"self_attention"`
+	Upscale           string      `json:"upscale"`
+	EmbeddingsModel   interface{} `json:"embeddings_model"`
+	LoraModel         interface{} `json:"lora_model"`
+	Tomesd            string      `json:"tomesd"`
+	ClipSkip          string      `json:"clip_skip"`
+	UseKarrasSigmas   string      `json:"use_karras_sigmas"`
+	Vae               interface{} `json:"vae"`
+	LoraStrength      interface{} `json:"lora_strength"`
+	Scheduler         string      `json:"scheduler"`
+	Webhook           interface{} `json:"webhook"`
+	TrackId           interface{} `json:"track_id"`
+}
+
+type TextToImageResponse struct {
+	Status         string   `json:"status"`
+	GenerationTime float64  `json:"generationTime"`
+	Id             int      `json:"id"`
+	Output         []string `json:"output"`
+	Meta           struct {
+		Prompt         string      `json:"prompt"`
+		ModelId        string      `json:"model_id"`
+		NegativePrompt string      `json:"negative_prompt"`
+		Scheduler      string      `json:"scheduler"`
+		Safetychecker  string      `json:"safetychecker"`
+		W              int         `json:"W"`
+		H              int         `json:"H"`
+		GuidanceScale  float64     `json:"guidance_scale"`
+		Seed           int64       `json:"seed"`
+		Steps          int         `json:"steps"`
+		NSamples       int         `json:"n_samples"`
+		FullUrl        string      `json:"full_url"`
+		Upscale        string      `json:"upscale"`
+		MultiLingual   string      `json:"multi_lingual"`
+		Panorama       string      `json:"panorama"`
+		SelfAttention  string      `json:"self_attention"`
+		Embeddings     interface{} `json:"embeddings"`
+		Lora           interface{} `json:"lora"`
+		Outdir         string      `json:"outdir"`
+		FilePrefix     string      `json:"file_prefix"`
+	} `json:"meta"`
+}
+
+func (self *Client) TextToImage(req TextToImageRequest, res *TextToImageResponse) error {
+	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestKey, self.APIKey)
+	return stablediffusionapi.DoPost(self.Client, "/api/v4/dreambooth", req, res)
+}
+
+type ImageToImageRequest struct {
+	stablediffusionapi.RequestKey
+	ModelId           string      `json:"model_id"`
+	Prompt            string      `json:"prompt"`
+	NegativePrompt    interface{} `json:"negative_prompt"`
+	InitImage         string      `json:"init_image"`
+	Width             string      `json:"width"`
+	Height            string      `json:"height"`
+	Samples           string      `json:"samples"`
+	NumInferenceSteps string      `json:"num_inference_steps"`
+	SafetyChecker     string      `json:"safety_checker"`
+	EnhancePrompt     string      `json:"enhance_prompt"`
+	GuidanceScale     float64     `json:"guidance_scale"`
+	Strength          float64     `json:"strength"`
+	Scheduler         string      `json:"scheduler"`
+	Seed              interface{} `json:"seed"`
+	LoraModel         interface{} `json:"lora_model"`
+	Tomesd            string      `json:"tomesd"`
+	UseKarrasSigmas   string      `json:"use_karras_sigmas"`
+	Vae               interface{} `json:"vae"`
+	LoraStrength      interface{} `json:"lora_strength"`
+	EmbeddingsModel   interface{} `json:"embeddings_model"`
+	Webhook           interface{} `json:"webhook"`
+	TrackId           interface{} `json:"track_id"`
+}
+
+type ImageToImageResponse struct {
+	Status         string   `json:"status"`
+	GenerationTime float64  `json:"generationTime"`
+	Id             int      `json:"id"`
+	Output         []string `json:"output"`
+	Meta           struct {
+		Prompt         string  `json:"prompt"`
+		ModelId        string  `json:"model_id"`
+		Scheduler      string  `json:"scheduler"`
+		Safetychecker  string  `json:"safetychecker"`
+		NegativePrompt string  `json:"negative_prompt"`
+		W              int     `json:"W"`
+		H              int     `json:"H"`
+		GuidanceScale  float64 `json:"guidance_scale"`
+		InitImage      string  `json:"init_image"`
+		Steps          int     `json:"steps"`
+		NSamples       int     `json:"n_samples"`
+		Strength       float64 `json:"strength"`
+		MultiLingual   string  `json:"multi_lingual"`
+		FullUrl        string  `json:"full_url"`
+		Upscale        string  `json:"upscale"`
+		Seed           int64   `json:"seed"`
+		Outdir         string  `json:"outdir"`
+		FilePrefix     string  `json:"file_prefix"`
+	} `json:"meta"`
+}
+
+func (self *Client) ImageToImage(req ImageToImageRequest, res *ImageToImageResponse) error {
+	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestKey, self.APIKey)
+	return stablediffusionapi.DoPost(self.Client, "/api/v4/dreambooth/img2img", req, res)
+}
+
+type InpaintRequest struct {
+	stablediffusionapi.RequestKey
+	ModelId         string      `json:"model_id"`
+	Prompt          string      `json:"prompt"`
+	NegativePrompt  interface{} `json:"negative_prompt"`
+	InitImage       string      `json:"init_image"`
+	MaskImage       string      `json:"mask_image"`
+	Width           string      `json:"width"`
+	Height          string      `json:"height"`
+	Samples         string      `json:"samples"`
+	Steps           string      `json:"steps"`
+	SafetyChecker   string      `json:"safety_checker"`
+	EnhancePrompt   string      `json:"enhance_prompt"`
+	GuidanceScale   float64     `json:"guidance_scale"`
+	Strength        float64     `json:"strength"`
+	Scheduler       string      `json:"scheduler"`
+	LoraModel       interface{} `json:"lora_model"`
+	Tomesd          string      `json:"tomesd"`
+	UseKarrasSigmas string      `json:"use_karras_sigmas"`
+	Vae             interface{} `json:"vae"`
+	LoraStrength    interface{} `json:"lora_strength"`
+	EmbeddingsModel interface{} `json:"embeddings_model"`
+	Seed            interface{} `json:"seed"`
+	Webhook         interface{} `json:"webhook"`
+	TrackId         interface{} `json:"track_id"`
+}
+
+type InpaintResponse struct {
+	Status         string   `json:"status"`
+	GenerationTime float64  `json:"generationTime"`
+	Id             int      `json:"id"`
+	Output         []string `json:"output"`
+	Meta           struct {
+		Prompt         string  `json:"prompt"`
+		ModelId        string  `json:"model_id"`
+		Scheduler      string  `json:"scheduler"`
+		Safetychecker  string  `json:"safetychecker"`
+		NegativePrompt string  `json:"negative_prompt"`
+		W              int     `json:"W"`
+		H              int     `json:"H"`
+		GuidanceScale  float64 `json:"guidance_scale"`
+		InitImage      string  `json:"init_image"`
+		MaskImage      string  `json:"mask_image"`
+		MultiLingual   string  `json:"multi_lingual"`
+		Steps          int     `json:"steps"`
+		NSamples       int     `json:"n_samples"`
+		FullUrl        string  `json:"full_url"`
+		Upscale        string  `json:"upscale"`
+		Seed           int     `json:"seed"`
+		Outdir         string  `json:"outdir"`
+		FilePrefix     string  `json:"file_prefix"`
+	} `json:"meta"`
+}
+
+func (self *Client) Inpaint(req InpaintRequest, res *InpaintResponse) error {
+	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestKey, self.APIKey)
+	return stablediffusionapi.DoPost(self.Client, "/api/v4/dreambooth/inpaint", req, res)
+}
+
+type FetchRequest struct {
+	stablediffusionapi.RequestKey
+	RequestId string `json:"request_id"`
+}
+
+type FetchResponse struct {
+	Status string   `json:"status"`
+	Id     int      `json:"id"`
+	Output []string `json:"output"`
+}
+
+func (self *Client) Fetch(req FetchRequest, res *FetchResponse) error {
+	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestKey, self.APIKey)
+	return stablediffusionapi.DoPost(self.Client, "/api/v4/dreambooth/fetch", req, res)
+}
+
+type ModelReloadRequest struct {
+	stablediffusionapi.RequestKey
+	ModelId string `json:"model_id"`
+}
+
+type ModelReloadResponse struct {
+}
+
+func (self *Client) ModelReload(req ModelReloadRequest, res *ModelReloadResponse) error {
+	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestKey, self.APIKey)
+	return stablediffusionapi.DoPost(self.Client, "/api/v4/dreambooth/model_reload", req, res)
+}
