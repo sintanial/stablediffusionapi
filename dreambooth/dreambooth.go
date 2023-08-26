@@ -1,8 +1,8 @@
 package dreambooth
 
 import (
+	"github.com/sintanial/stablediffusionapi"
 	"net/http"
-	"stablediffusionapi"
 )
 
 type Client struct {
@@ -18,7 +18,7 @@ func NewClient(APIKey string) *Client {
 }
 
 type TextToImageRequest struct {
-	stablediffusionapi.RequestKey
+	stablediffusionapi.RequestBase
 	ModelId           string      `json:"model_id"`
 	Prompt            string      `json:"prompt"`
 	NegativePrompt    string      `json:"negative_prompt"`
@@ -76,12 +76,12 @@ type TextToImageResponse struct {
 }
 
 func (self *Client) TextToImage(req TextToImageRequest, res *TextToImageResponse) error {
-	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestKey, self.APIKey)
+	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestBase, self.APIKey)
 	return stablediffusionapi.DoPost(self.Client, "/api/v4/dreambooth", req, res)
 }
 
 type ImageToImageRequest struct {
-	stablediffusionapi.RequestKey
+	stablediffusionapi.RequestBase
 	ModelId           string      `json:"model_id"`
 	Prompt            string      `json:"prompt"`
 	NegativePrompt    interface{} `json:"negative_prompt"`
@@ -134,12 +134,12 @@ type ImageToImageResponse struct {
 }
 
 func (self *Client) ImageToImage(req ImageToImageRequest, res *ImageToImageResponse) error {
-	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestKey, self.APIKey)
+	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestBase, self.APIKey)
 	return stablediffusionapi.DoPost(self.Client, "/api/v4/dreambooth/img2img", req, res)
 }
 
 type InpaintRequest struct {
-	stablediffusionapi.RequestKey
+	stablediffusionapi.RequestBase
 	ModelId         string      `json:"model_id"`
 	Prompt          string      `json:"prompt"`
 	NegativePrompt  interface{} `json:"negative_prompt"`
@@ -193,12 +193,12 @@ type InpaintResponse struct {
 }
 
 func (self *Client) Inpaint(req InpaintRequest, res *InpaintResponse) error {
-	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestKey, self.APIKey)
+	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestBase, self.APIKey)
 	return stablediffusionapi.DoPost(self.Client, "/api/v4/dreambooth/inpaint", req, res)
 }
 
 type FetchRequest struct {
-	stablediffusionapi.RequestKey
+	stablediffusionapi.RequestBase
 	RequestId string `json:"request_id"`
 }
 
@@ -209,12 +209,12 @@ type FetchResponse struct {
 }
 
 func (self *Client) Fetch(req FetchRequest, res *FetchResponse) error {
-	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestKey, self.APIKey)
+	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestBase, self.APIKey)
 	return stablediffusionapi.DoPost(self.Client, "/api/v4/dreambooth/fetch", req, res)
 }
 
 type ModelReloadRequest struct {
-	stablediffusionapi.RequestKey
+	stablediffusionapi.RequestBase
 	ModelId string `json:"model_id"`
 }
 
@@ -222,6 +222,6 @@ type ModelReloadResponse struct {
 }
 
 func (self *Client) ModelReload(req ModelReloadRequest, res *ModelReloadResponse) error {
-	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestKey, self.APIKey)
+	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestBase, self.APIKey)
 	return stablediffusionapi.DoPost(self.Client, "/api/v4/dreambooth/model_reload", req, res)
 }
