@@ -19,31 +19,29 @@ func NewClient(APIKey string) *Client {
 
 type TextToImageRequest struct {
 	stablediffusionapi.RequestBase
+	stablediffusionapi.RequiredImageFields
 	ModelId           string      `json:"model_id"`
 	Prompt            string      `json:"prompt"`
-	NegativePrompt    string      `json:"negative_prompt"`
-	Width             string      `json:"width"`
-	Height            string      `json:"height"`
-	Samples           string      `json:"samples"`
-	NumInferenceSteps string      `json:"num_inference_steps"`
-	SafetyChecker     string      `json:"safety_checker"`
-	EnhancePrompt     string      `json:"enhance_prompt"`
-	Seed              interface{} `json:"seed"`
-	GuidanceScale     float64     `json:"guidance_scale"`
-	MultiLingual      string      `json:"multi_lingual"`
-	Panorama          string      `json:"panorama"`
-	SelfAttention     string      `json:"self_attention"`
-	Upscale           string      `json:"upscale"`
-	EmbeddingsModel   interface{} `json:"embeddings_model"`
-	LoraModel         interface{} `json:"lora_model"`
-	Tomesd            string      `json:"tomesd"`
-	ClipSkip          string      `json:"clip_skip"`
-	UseKarrasSigmas   string      `json:"use_karras_sigmas"`
-	Vae               interface{} `json:"vae"`
-	LoraStrength      interface{} `json:"lora_strength"`
-	Scheduler         string      `json:"scheduler"`
-	Webhook           interface{} `json:"webhook"`
-	TrackId           interface{} `json:"track_id"`
+	NegativePrompt    string      `json:"negative_prompt,omitempty"`
+	NumInferenceSteps string      `json:"num_inference_steps,omitempty"`
+	SafetyChecker     string      `json:"safety_checker,omitempty"`
+	EnhancePrompt     string      `json:"enhance_prompt,omitempty"`
+	Seed              interface{} `json:"seed,omitempty"`
+	GuidanceScale     float64     `json:"guidance_scale,omitempty"`
+	MultiLingual      string      `json:"multi_lingual,omitempty"`
+	Panorama          string      `json:"panorama,omitempty"`
+	SelfAttention     string      `json:"self_attention,omitempty"`
+	Upscale           string      `json:"upscale,omitempty"`
+	EmbeddingsModel   interface{} `json:"embeddings_model,omitempty"`
+	LoraModel         interface{} `json:"lora_model,omitempty"`
+	Tomesd            string      `json:"tomesd,omitempty"`
+	ClipSkip          string      `json:"clip_skip,omitempty"`
+	UseKarrasSigmas   string      `json:"use_karras_sigmas,omitempty"`
+	Vae               interface{} `json:"vae,omitempty"`
+	LoraStrength      interface{} `json:"lora_strength,omitempty"`
+	Scheduler         string      `json:"scheduler,omitempty"`
+	Webhook           interface{} `json:"webhook,omitempty"`
+	TrackId           interface{} `json:"track_id,omitempty"`
 }
 
 type TextToImageResponse struct {
@@ -77,18 +75,17 @@ type TextToImageResponse struct {
 
 func (self *Client) TextToImage(req TextToImageRequest, res *TextToImageResponse) error {
 	stablediffusionapi.SetApiKeyIfNeeded(&req.RequestBase, self.APIKey)
+	stablediffusionapi.SetDefaultRequiredImageFieldsIfNeeded(&req.RequiredImageFields)
 	return stablediffusionapi.DoPost(self.Client, "/api/v4/dreambooth", req, res)
 }
 
 type ImageToImageRequest struct {
 	stablediffusionapi.RequestBase
+	stablediffusionapi.RequiredImageFields
 	ModelId           string      `json:"model_id"`
 	Prompt            string      `json:"prompt"`
 	NegativePrompt    interface{} `json:"negative_prompt"`
 	InitImage         string      `json:"init_image"`
-	Width             string      `json:"width"`
-	Height            string      `json:"height"`
-	Samples           string      `json:"samples"`
 	NumInferenceSteps string      `json:"num_inference_steps"`
 	SafetyChecker     string      `json:"safety_checker"`
 	EnhancePrompt     string      `json:"enhance_prompt"`
@@ -140,14 +137,12 @@ func (self *Client) ImageToImage(req ImageToImageRequest, res *ImageToImageRespo
 
 type InpaintRequest struct {
 	stablediffusionapi.RequestBase
+	stablediffusionapi.RequiredImageFields
 	ModelId         string      `json:"model_id"`
 	Prompt          string      `json:"prompt"`
 	NegativePrompt  interface{} `json:"negative_prompt"`
 	InitImage       string      `json:"init_image"`
 	MaskImage       string      `json:"mask_image"`
-	Width           string      `json:"width"`
-	Height          string      `json:"height"`
-	Samples         string      `json:"samples"`
 	Steps           string      `json:"steps"`
 	SafetyChecker   string      `json:"safety_checker"`
 	EnhancePrompt   string      `json:"enhance_prompt"`

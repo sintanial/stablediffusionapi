@@ -19,11 +19,11 @@ func NewClient(APIKey string) *Client {
 
 type TextToImageRequest struct {
 	stablediffusionapi.RequestBase
+	stablediffusionapi.RequiredImageFields
 	//Text prompt with description of the things you want in the image to be generated
 	Prompt string `json:"prompt"`
 	//Items you don't want in the image.
 	NegativePrompt string `json:"negative_prompt,omitempty"`
-	stablediffusionapi.RequiredImageFields
 	//Number of denoising steps. Available values: 21, 31, 41, 51.
 	NumInferenceSteps string `json:"num_inference_steps,omitempty"`
 	//A checker for NSFW images. If such an image is detected, it will be replaced by a blank image.
@@ -130,11 +130,11 @@ func (self *Client) ImageToImage(req ImageToImageRequest, res *ImageToImageRespo
 
 type InpaintRequest struct {
 	stablediffusionapi.RequestBase
-	Prompt         string `json:"prompt"`
-	NegativePrompt string `json:"negative_prompt,omitempty"`
-	InitImage      string `json:"init_image"`
-	MaskImage      string `json:"mask_image,omitempty"`
 	stablediffusionapi.RequiredImageFields
+	Prompt            string      `json:"prompt"`
+	NegativePrompt    string      `json:"negative_prompt,omitempty"`
+	InitImage         string      `json:"init_image"`
+	MaskImage         string      `json:"mask_image,omitempty"`
 	NumInferenceSteps string      `json:"num_inference_steps,omitempty"`
 	SafetyChecker     string      `json:"safety_checker,omitempty"`
 	EnhancePrompt     string      `json:"enhance_prompt,omitempty"`
@@ -147,6 +147,7 @@ type InpaintRequest struct {
 
 type InpaintResponse struct {
 	stablediffusionapi.ResponseBase
+	stablediffusionapi.RequiredImageFields
 	GenerationTime float64  `json:"generationTime"`
 	Id             int      `json:"id"`
 	Output         []string `json:"output"`
